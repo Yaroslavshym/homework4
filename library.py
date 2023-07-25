@@ -1,5 +1,6 @@
 import datetime
 import jwt
+from jwt import InvalidSignatureError
 
 
 def create_token(payload_dictionary: dict, token_password: str):
@@ -16,10 +17,13 @@ def create_token(payload_dictionary: dict, token_password: str):
 
 
 def decode_token(token_jwt: str, token_password: str):
-    decoded = jwt.decode(
-        token_jwt,
-        token_password,
-        algorithms='HS256', )
+    try:
+        decoded = jwt.decode(
+            token_jwt,
+            token_password,
+            algorithms='HS256', )
+    except InvalidSignatureError:
+        return False
     return decoded
 
 
